@@ -1,0 +1,11 @@
+tircker
+*.py
+error
+getmarkets
+BarShaking/bin/*
+BarShaking/bin/*/*
+BarShaking/obj/*
+BarShaking/obj/*/*
+*.dll
+*.suo
+*.exe
