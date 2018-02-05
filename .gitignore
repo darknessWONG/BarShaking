@@ -6,6 +6,10 @@ BarShaking/bin/*
 BarShaking/bin/*/*
 BarShaking/obj/*
 BarShaking/obj/*/*
+BarShaking/Debug/*
+BarShaking/Release/*
+Debug/*
+Release/*
 *.dll
 *.suo
 *.exe
@@ -13,3 +17,4 @@ BarShaking/obj/*/*
 *.bsc
 *.pdb
 *.db
+ipch/*

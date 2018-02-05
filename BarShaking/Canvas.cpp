@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Canvas.h"
-#define CONIOEX
+
 #include "conioex.h"
 
 Canvas::Canvas(int cav_line_num, int cav_colum_num, int display_line_num, int display_colum_num)
