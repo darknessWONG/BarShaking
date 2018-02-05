@@ -9,3 +9,7 @@ BarShaking/obj/*/*
 *.dll
 *.suo
 *.exe
+*.ilk
+*.bsc
+*.pdb
+*.db
