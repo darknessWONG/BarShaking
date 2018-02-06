@@ -197,9 +197,9 @@ void Canvas::refreash(void)
 	gotoxy(1, 1);
 	char* tmp_map = new char[(display_colum_num + 1) * display_line_num + 1];
 	int num = 0, now_color = 255;
-	for (int i = now_display_posX; i < now_display_posX + display_line_num; i++)
+	for (int i = now_display_posY; i < now_display_posY + display_line_num; i++)
 	{
-		for (int j = now_display_posY; j < now_display_posY + display_colum_num; j++)
+		for (int j = now_display_posX; j < now_display_posX + display_colum_num; j++)
 		{
 			if (num == 0)
 			{
@@ -276,18 +276,6 @@ void Canvas::set_member(int cav_line_num, int cav_colum_num, int display_line_nu
 	shape_list = 0;
 	layer_num = 0;
 
-	//string cmd = "mode con cols=";
-	//stringstream ss;
-	//string tmp;
-	//ss << display_colum_num + 1;
-	//ss >> tmp;
-	//cmd += tmp;
-	//cmd += " lines=";
-	//ss.clear();
-	//ss << display_line_num + 1;
-	//ss >> tmp;
-	//cmd += tmp;
-	//system(cmd.c_str());
 	set_windows_size(display_line_num + 1, display_colum_num + 1);
 
 	setcursortype(NOCURSOR);

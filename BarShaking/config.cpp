@@ -6,8 +6,8 @@ double NOW_FPS = 1;
 
 const static int CAV_LINE_NUM = 200;
 const static int CAV_COLUM_NUM = 640;
-const static int LINE_NUM = 50;
-const static int COLUM_NUM = 160;
+const static int LINE_NUM = 80;
+const static int COLUM_NUM = 25;
 const static int MAP_LINE_NUM = 100;
 const static int MAP_COLUM_NUM = 300;
 const static int TRAVEL_MAP_REAL_POSX = 43;

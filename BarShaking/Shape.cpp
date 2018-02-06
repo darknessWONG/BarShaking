@@ -38,10 +38,10 @@ char * Shape::paint(char * r_map, short * r_color_map, int line_num, int colum_n
 				continue;
 			}
 
-			int real_x = i + rel_posX;
-			int real_y = j + rel_posY;
-			r_map[real_x * colum_num + real_y] = map[i * get_colum_num() + j];
-			r_color_map[real_x * colum_num + real_y] = color_map[i * get_colum_num() + j];
+			int real_x = j + rel_posX;
+			int real_y = i + rel_posY;
+			r_map[real_y * colum_num + real_x] = map[i * get_colum_num() + j];
+			r_color_map[real_y * colum_num + real_x] = color_map[i * get_colum_num() + j];
 		}
 	}
 	return r_map;
@@ -138,7 +138,7 @@ void Shape::delete_maps(void)
 {
 	if (map != 0)
 	{
-		delete[] map;
+		delete map;
 		map = 0;
 	}
 	if (color_map != 0)
