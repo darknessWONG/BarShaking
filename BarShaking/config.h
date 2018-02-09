@@ -44,22 +44,7 @@ extern const int PLAYER_MAP_REAL_POSY;
 extern const int ROLE_LINE_NUM;
 extern const int ROLE_COLUM_NUM;
 
-extern const int BATTLE_MAIN_MENU_SELECT_NUM;
-extern const int BATTLE_MAIN_MENU_BOX_LINE_NUM;
-extern const int BATTLE_MAIN_MENU_BOX_COLUM_NUM;
-extern const int BATTLE_MAIN_MENU_REAL_POSX;
-extern const int BATTLE_MAIN_MENU_REAL_POSY;
-extern const int BATTLE_SUB_MENU_SELECT_NUM;
-extern const int BATTLE_SUB_MENU_BOX_LINE_NUM;
-extern const int BATTLE_SUB_MENU_BOX_COLUM_NUM;
-extern const int BATTLE_SUB_MENU_REAL_POSX;
-extern const int BATTLE_SUB_MENU_REAL_POSY;
-extern const int BATTLE_SELECT_MENU_BOX_LINE_NUM;
-extern const int BATTLE_SELECT_MENU_BOX_COLUM_NUM;
-extern const int BATTLE_SELECT_MENU_REAL_POSX;
-extern const int BATTLE_SELECT_MENU_REAL_POSY;
-extern const int BATTLE_CHARA_REAL_POSX;
-extern const int BATTLE_CHARA_REAL_POSY;
+
 
 extern const string INPUT_NAME_STR;
 extern const string SELECT_CLASS_STR;

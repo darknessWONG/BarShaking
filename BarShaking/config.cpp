@@ -6,8 +6,8 @@ double NOW_FPS = 1;
 
 const static int CAV_LINE_NUM = 200;
 const static int CAV_COLUM_NUM = 640;
-const static int LINE_NUM = 80;
-const static int COLUM_NUM = 25;
+const static int LINE_NUM = 25;
+const static int COLUM_NUM = 80;
 const static int MAP_LINE_NUM = 100;
 const static int MAP_COLUM_NUM = 300;
 const static int TRAVEL_MAP_REAL_POSX = 43;
@@ -17,22 +17,6 @@ const static int PLAYER_MAP_REAL_POSY = 85 + TRAVEL_MAP_REAL_POSY;
 const static int ROLE_LINE_NUM = 5;
 const static int ROLE_COLUM_NUM = 15;
 
-const static int BATTLE_MAIN_MENU_SELECT_NUM = 2;
-const static int BATTLE_MAIN_MENU_BOX_LINE_NUM = 10;
-const static int BATTLE_MAIN_MENU_BOX_COLUM_NUM = 60;
-const static int BATTLE_MAIN_MENU_REAL_POSX = 39;
-const static int BATTLE_MAIN_MENU_REAL_POSY = 0;
-const static int BATTLE_SUB_MENU_SELECT_NUM = 2;
-const static int BATTLE_SUB_MENU_BOX_LINE_NUM = 10;
-const static int BATTLE_SUB_MENU_BOX_COLUM_NUM = 50;
-const static int BATTLE_SUB_MENU_REAL_POSX = 39;
-const static int BATTLE_SUB_MENU_REAL_POSY = 60;
-const static int BATTLE_SELECT_MENU_BOX_LINE_NUM = 10;
-const static int BATTLE_SELECT_MENU_BOX_COLUM_NUM = 50;
-const static int BATTLE_SELECT_MENU_REAL_POSX = 39;
-const static int BATTLE_SELECT_MENU_REAL_POSY = 110;
-const static int BATTLE_CHARA_REAL_POSX = 5;
-const static int BATTLE_CHARA_REAL_POSY = 10;
 
 
 const static string INPUT_NAME_STR = "カッコイイ名前を入力してください";

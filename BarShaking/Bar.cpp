@@ -72,9 +72,9 @@ void Bar::cal_now_shape(void)
 		{
 			if (base_shape->get_map()[i * base_shape->get_colum_num() + j] != ' ')
 			{
-				double longg = sqrt(pow(i - 9, 2) + pow(j - 10, 2));
-				double new_x = longg * sin(0.1 * 3.1415926) + j;
-				double new_y = 9 - longg * cos(0.1 * 3.1415926);
+				double longg = sqrt(pow(i - center_x, 2) + pow(j - center_y, 2));
+				double new_x = longg * sin(radin * 3.1415926) + j;
+				double new_y = center_y - longg * cos(radin * 3.1415926);
 
 				if ((new_x < 0 || new_x > base_shape->get_colum_num() - 1) || (new_y < 0 || new_y > base_shape->get_line_num()))
 				{

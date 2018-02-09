@@ -160,7 +160,7 @@ void Shape::set_member(int line_num, int colum_num, char * map, short * color_ma
 	this->map = map;
 	this->color_map = color_map;
 	this->rel_posX = rel_posX;
-	this->rel_posY;
+	this->rel_posY = rel_posY;
 
 	shape_next = 0;
 }
