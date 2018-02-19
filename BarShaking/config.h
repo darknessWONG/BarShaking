@@ -31,10 +31,15 @@
 extern const int FPS;
 extern double NOW_FPS;
 
+extern const double PAI;
+
 extern const int CAV_LINE_NUM;
 extern const int CAV_COLUM_NUM;
 extern const int LINE_NUM;
 extern const int COLUM_NUM;
+extern const int TIME_BOX_LINE_NUM;
+extern const int TIME_BOX_COLUM_NUM;
+
 extern const int MAP_LINE_NUM;
 extern const int MAP_COLUM_NUM;
 extern const int TRAVEL_MAP_REAL_POSX;
@@ -44,22 +49,10 @@ extern const int PLAYER_MAP_REAL_POSY;
 extern const int ROLE_LINE_NUM;
 extern const int ROLE_COLUM_NUM;
 
-
-
-extern const string INPUT_NAME_STR;
-extern const string SELECT_CLASS_STR;
-extern const string STATUS_CHECK_STR;
-extern const string SELECTING_MARK;
-extern const string BATTLE_MAIN_MENU_STR;
-extern const string BATTLE_TARGET_MENU_STR;
-extern const string BATTLE_MAIN_MENU_SELECTION_STR[];
-extern const string SKILL_MAIN_MENU_STR;
-extern const string DAMAGE_STR;
-extern const string HEAL_STR;
-extern const string INTERLUDE_STR;
-extern const string ATTACK_STR;
-extern const string MOSTER_NAME;
-extern const string MP_LESS_STR;
+extern const string TIME_BOX_STR;
 
 extern const string MAIN_SOUND_STR;
 extern const string BATTLE_SOUND_STR;
+
+string num_to_str(int);
+string num_to_str(double);

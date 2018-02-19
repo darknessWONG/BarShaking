@@ -4,6 +4,7 @@
 #include <time.h>
 #define CONIOEX
 #include "conioex.h"
+#include <string>
 
 Game::Game()
 {
@@ -51,7 +52,7 @@ void Game::main_loop(void)
 
 			canv->paint();
 			
-			bar_status_update();
+			status_update();
 			
 			cal_screen();
 
@@ -77,19 +78,31 @@ void Game::init_game(void)
 	 
 	bar = create_bar();
 	bar->set_radin(0);
+	bar->get_base_shape()->set_rel_posX(20);
+	bar->get_base_shape()->set_rel_posY(10);
 
 	radin_speed = 0;
 	acceleration = 0.01;
 
 	status = unkwon;
 	level = 1;
-	left_time = 15000000;
+	left_time = 5000;
+	
+	create_time_box();
 }
 
 Bar * Game::create_bar(void)
 {
 	Shape *bar_shape = new Shape(FileReader::ReadModelFile("bar.txt", "bar_color.txt"));
 	return new Bar(bar_shape, 19, 20);
+}
+
+void Game::create_time_box(void)
+{
+	time_box = new My_diallog_box(TIME_BOX_LINE_NUM, TIME_BOX_COLUM_NUM);
+	time_box_status_update();
+	time_box->set_rel_posX(20);
+	time_box->set_rel_posY(0);
 }
 
 void Game::set_radin_speed_random(void)
@@ -126,11 +139,11 @@ double Game::cal_input_value(void)
 	reinport();
 	if (inport(PK_A))
 	{
-		return -0.01;
+		return -0.02;
 	}
 	if (inport(PK_D))
 	{
-		return 0.01;
+		return 0.02;
 	}
 	return 0;
 }
@@ -139,8 +152,15 @@ void Game::cal_screen(void)
 {
 	canv->clean_shap_list();
 	
-	bar->cal_now_shape();
 	canv->add_shap(bar->get_now_shape(), 1);
+
+	canv->add_shap(time_box, 2);
+}
+
+void Game::status_update(void)
+{
+	bar_status_update();
+	time_box_status_update();
 }
 
 void Game::bar_status_update(void)
@@ -158,5 +178,18 @@ void Game::bar_status_update(void)
 
 	bar->set_radin(bar->get_radin() + radin_speed);
 
+	bar->cal_now_shape();
+}
 
+void Game::time_box_status_update(void)
+{
+	time_box->set_sentence_with_delete(cal_time_box_sentence());
+	time_box->cal_map();
+}
+
+string Game::cal_time_box_sentence(void)
+{
+	string time = num_to_str(left_time);
+	string time_str = TIME_BOX_STR;
+	return time_str.replace(TIME_BOX_STR.find("%s"), 2, time);
 }

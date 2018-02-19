@@ -1,13 +1,19 @@
 #include "stdafx.h"
 #include "config.h"
+#include <sstream>
 
 const static int FPS = 60;
 double NOW_FPS = 1;
+
+const static double PAI = 3.1415926;
 
 const static int CAV_LINE_NUM = 200;
 const static int CAV_COLUM_NUM = 640;
 const static int LINE_NUM = 25;
 const static int COLUM_NUM = 80;
+const static int TIME_BOX_LINE_NUM = 3;
+const static int TIME_BOX_COLUM_NUM = 15;
+
 const static int MAP_LINE_NUM = 100;
 const static int MAP_COLUM_NUM = 300;
 const static int TRAVEL_MAP_REAL_POSX = 43;
@@ -18,21 +24,28 @@ const static int ROLE_LINE_NUM = 5;
 const static int ROLE_COLUM_NUM = 15;
 
 
+const static string TIME_BOX_STR = "time: %s";
 
-const static string INPUT_NAME_STR = "カッコイイ名前を入力してください";
-const static string SELECT_CLASS_STR = "クラスを選択したください";
-const static string STATUS_CHECK_STR = "プレイヤーキャラの情報：";
-const static string SELECTING_MARK = "→";
-const static string BATTLE_MAIN_MENU_STR = "%nのアクションを選択してください";
-const static string BATTLE_TARGET_MENU_STR = "ターゲットを選択してください";
-const static string BATTLE_MAIN_MENU_SELECTION_STR[] = { "攻撃", "スキル" };
-const static string SKILL_MAIN_MENU_STR = "スキルを選択してください";
-const static string DAMAGE_STR = "%nは%sで%pに%dダメージを与える";
-const static string HEAL_STR = "%nは%sで%pに%d治療を与える";
-const static string INTERLUDE_STR = "これは自身と戦う物語";
-const static string ATTACK_STR = "攻撃";
-const static string MOSTER_NAME = "雑音";
-const static string MP_LESS_STR = "mp値は足りない";
 
 const static string MAIN_SOUND_STR = "./music/miyako-japan3.mp3";
 const static string BATTLE_SOUND_STR = "./music/wen-kamuy2.mp3";
+
+string num_to_str(int num)
+{
+	string str;
+	stringstream sst;
+	sst << num;
+	sst >> str;
+	return str;
+}
+
+string num_to_str(double num)
+{
+	string str;
+	stringstream sst;
+	sst << num;
+	sst >> str;
+	return str;
+}
+
+

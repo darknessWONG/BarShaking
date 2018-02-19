@@ -51,6 +51,11 @@ Shape * Bar::get_now_shape(void)
 	return now_shape;
 }
 
+Shape * Bar::get_base_shape(void)
+{
+	return base_shape;
+}
+
 void Bar::cal_now_shape(void)
 {
 	if (now_shape != 0)

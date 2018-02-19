@@ -32,7 +32,7 @@ private:
 	void set_member(int line_num = 0, int colum_num = 0, char* map = 0, short* color_map = 0, int rel_posX = 0, int rel_posY = 0);
 	void copy_maps(char* map, short* color_map);
 
-	Shape *shape_next;
+	Shape *shape_next = 0;
 	int rel_posX;
 	int rel_posY;
 	int abs_posX;

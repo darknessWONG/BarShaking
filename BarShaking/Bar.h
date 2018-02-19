@@ -16,6 +16,7 @@ public:
 	double get_radin(void);
 	void set_radin(double);
 	Shape *get_now_shape(void);
+	Shape *get_base_shape(void);
 
 	void cal_now_shape(void);
 private:
