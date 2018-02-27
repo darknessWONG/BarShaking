@@ -29,6 +29,17 @@ Line::Line(int x1, int y1, double radin)
 	cal_equations_from_radin();
 }
 
+Line::Line(const Line & li)
+{
+	a = li.a;
+	b = li.b;
+	x1 = li.x1;
+	y1 = li.y1;
+	x2 = li.x2;
+	y2 = li.y2;
+	radin = li.radin;
+}
+
 
 Line::~Line()
 {
@@ -112,9 +123,32 @@ void Line::cal_equations_from_point()
 
 void Line::cal_equations_from_radin(void)
 {
-	double new_radin = radin > 0.5 ? 1 - radin : radin;
-	a = sin(new_radin * PAI) / cos(new_radin * PAI);
-	b = 0;
+	//double new_radin = radin > 0.5 ? 1- radin : radin;
+	double new_radin = radin;
+	int symbol = radin > 0.5 ? -1 : 1;
+	a = sin(new_radin * PAI) / cos(new_radin * PAI) * -1;
+	b = abs(a) * x1 * symbol;
+}
+
+int Line::check_point(double x, double y)
+{
+	double new_y = a * x + b;
+	if (y > new_y) return 1;
+	if (y == new_y) return 0;
+	if (y < new_y) return -1;
+}
+
+Point* Line::check_intersect(Line li)
+{
+	if (a == li.a)
+	{
+		return 0;
+	}
+	double new_x = (li.b - b) / (a - li.a);
+	double new_y = a * new_x + b;
+
+
+	return new Point(new_x, new_y);
 }
 
 void Line::init_member(void)

@@ -151,12 +151,19 @@ void Canvas::clean_shap_list(void)
 	{
 		for (int i = 0; i < layer_num; i++)
 		{
-			Shape *tmp = shape_list[i];
-			while (tmp != 0)
+			try 
 			{
-				Shape *ptr = tmp->get_shape_next();
-				tmp->set_shape_next(0);
-				tmp = ptr;
+				Shape *tmp = shape_list[i];
+				while (tmp != 0)
+				{
+					Shape *ptr = tmp->get_shape_next();
+					tmp->set_shape_next(0);
+					tmp = ptr;
+				}
+			}
+			catch (exception e)
+			{
+				exception_parser(e);
 			}
 		}
 		delete[] shape_list;
@@ -289,4 +296,10 @@ void Canvas::paint_list(Shape* list)
 		map = prt->paint(map, color_map, cav_line_num, cav_colum_num);
 		prt = prt->get_shape_next();
 	}
+}
+
+void Canvas::exception_parser(exception e)
+{
+	//do something
+	cout << "aaa" << endl;
 }

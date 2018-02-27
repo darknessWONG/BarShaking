@@ -14,6 +14,8 @@ Bar::Bar(Shape * base_shape, int center_x, int center_y)
 
 Bar::~Bar()
 {
+	delete_now_shape();
+	delete_base_shape();
 }
 
 int Bar::get_center_x(void)
@@ -58,11 +60,7 @@ Shape * Bar::get_base_shape(void)
 
 void Bar::cal_now_shape(void)
 {
-	if (now_shape != 0)
-	{
-		delete now_shape;
-		now_shape = 0;
-	}
+	delete_now_shape();
 
 	char *map = new char[base_shape->get_line_num() * base_shape->get_colum_num()]{ ' ' };
 	short *color_map = new short[base_shape->get_line_num() * base_shape->get_colum_num()]{ 4 };
@@ -108,4 +106,22 @@ void Bar::set_member(Shape * base_shape, int center_x, int center_y, double radi
 	this->center_x = center_x;
 	this->center_y = center_y;
 	this->radin = radin;
+}
+
+void Bar::delete_now_shape(void)
+{
+	if (now_shape != 0)
+	{
+		delete now_shape;
+		now_shape = 0;
+	}
+}
+
+void Bar::delete_base_shape(void)
+{
+	if (base_shape != 0)
+	{
+		delete base_shape;
+		base_shape = 0;
+	}
 }

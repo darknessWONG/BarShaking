@@ -21,6 +21,9 @@ public:
 	void cal_now_shape(void);
 private:
 	void set_member(Shape *base_shape, int center_x = 0, int center_y = 0, double radin = 0);
+	
+	void delete_now_shape(void);
+	void delete_base_shape(void);
 
 	Shape *base_shape = 0;
 	Shape *now_shape = 0;

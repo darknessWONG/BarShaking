@@ -54,6 +54,15 @@
     <ClInclude Include="My_diallog_box.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Shadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LightGame.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -87,6 +96,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="My_diallog_box.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Shadow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LightGame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

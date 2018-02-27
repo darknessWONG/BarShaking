@@ -13,6 +13,7 @@ Game::Game()
 
 Game::~Game()
 {
+	delete time_box;
 }
 
 void Game::set_canv(Canvas *canv)
@@ -78,8 +79,10 @@ void Game::init_game(void)
 	 
 	bar = create_bar();
 	bar->set_radin(0);
-	bar->get_base_shape()->set_rel_posX(20);
-	bar->get_base_shape()->set_rel_posY(10);
+	int bar_posX = canv->get_now_display_posX() + (canv->get_display_colum_num() - bar->get_base_shape()->get_colum_num()) / 2;
+	int bar_posY = canv->get_now_display_posY() + (canv->get_display_line_num() - bar->get_base_shape()->get_line_num());
+	bar->get_base_shape()->set_rel_posX(bar_posX);
+	bar->get_base_shape()->set_rel_posY(bar_posY);
 
 	radin_speed = 0;
 	acceleration = 0.01;
@@ -107,22 +110,6 @@ void Game::create_time_box(void)
 
 void Game::set_radin_speed_random(void)
 {
-
-	//int dic = rand() % 2;
-
-	//double speed = (double)(rand() % 100) / 1000;
-	/*switch (dic)
-	{
-	case 0:
-		radin_speed = speed;
-		break;
-	case 1:
-		radin_speed = -speed;
-		break;
-	default:
-		break;
-	}*/
-
 	if (bar->get_radin() >=  0)
 	{
 		radin_speed += acceleration;
@@ -139,11 +126,11 @@ double Game::cal_input_value(void)
 	reinport();
 	if (inport(PK_A))
 	{
-		return -0.02;
+		return -0.01;
 	}
 	if (inport(PK_D))
 	{
-		return 0.02;
+		return 0.01;
 	}
 	return 0;
 }
@@ -166,7 +153,7 @@ void Game::status_update(void)
 void Game::bar_status_update(void)
 {
 
-	if (screen_num >= 30)
+	if (screen_num >= 10)
 	{
 		set_radin_speed_random();
 		screen_num = 0;
@@ -189,7 +176,7 @@ void Game::time_box_status_update(void)
 
 string Game::cal_time_box_sentence(void)
 {
-	string time = num_to_str(left_time);
+	string time = num_to_str(left_time / 1000);
 	string time_str = TIME_BOX_STR;
 	return time_str.replace(TIME_BOX_STR.find("%s"), 2, time);
 }

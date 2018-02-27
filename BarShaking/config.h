@@ -33,12 +33,21 @@ extern double NOW_FPS;
 
 extern const double PAI;
 
-extern const int CAV_LINE_NUM;
-extern const int CAV_COLUM_NUM;
 extern const int LINE_NUM;
 extern const int COLUM_NUM;
+extern const int CAV_LINE_NUM;
+extern const int CAV_COLUM_NUM;
 extern const int TIME_BOX_LINE_NUM;
 extern const int TIME_BOX_COLUM_NUM;
+extern const int FLASHLIGHT_REL_X;
+extern const int FLASHLIGHT_REL_Y;
+extern const double FLASHLIGHT_WIDTH;
+extern const double FLASHLIGHT_RADIN;
+extern const int PLAYER_INITAL_POS_X;
+extern const int PLAYER_INITAL_POS_Y;
+
+extern const int LIGHT_COLOR;
+extern const int VOID_COLOR;
 
 extern const int MAP_LINE_NUM;
 extern const int MAP_COLUM_NUM;
@@ -56,3 +65,12 @@ extern const string BATTLE_SOUND_STR;
 
 string num_to_str(int);
 string num_to_str(double);
+
+//create a arrary with [num] element 
+//and initialize with [ch]
+char* new_map(int num, char ch);
+
+//create a arrary with [num] element 
+//and initialize with [ch]
+short* new_color_map(int num, short ch);
+

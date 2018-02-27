@@ -152,8 +152,11 @@
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FlashLight.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="LightGame.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="My_diallog_box.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Shadow.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -166,8 +169,11 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FlashLight.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="LightGame.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="My_diallog_box.cpp" />
+    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
