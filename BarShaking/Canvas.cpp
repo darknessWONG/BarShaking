@@ -161,9 +161,9 @@ void Canvas::clean_shap_list(void)
 					tmp = ptr;
 				}
 			}
-			catch (exception e)
+			catch (...)
 			{
-				exception_parser(e);
+				exception_parser();
 			}
 		}
 		delete[] shape_list;
@@ -298,8 +298,8 @@ void Canvas::paint_list(Shape* list)
 	}
 }
 
-void Canvas::exception_parser(exception e)
+void Canvas::exception_parser()
 {
 	//do something
-	cout << "aaa" << endl;
+	return;
 }

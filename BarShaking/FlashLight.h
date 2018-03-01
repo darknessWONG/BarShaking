@@ -29,10 +29,10 @@ public:
 
 	void cal_lines(void);
 	void cal_shape(void);
-private:
-	void set_member(int rel_x = 0, int rel_y = 0, double width = 0, double radin = 0, int line_num = LINE_NUM, int colum_num = COLUM_NUM);
 
 	bool check_point_in_area(int x, int y);
+private:
+	void set_member(int rel_x = 0, int rel_y = 0, double width = 0, double radin = 0, int line_num = LINE_NUM, int colum_num = COLUM_NUM);
 
 	void delete_shape(void);
 	void delete_line_left(void);

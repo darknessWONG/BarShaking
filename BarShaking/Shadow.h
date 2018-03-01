@@ -23,6 +23,8 @@ public:
 	void delete_shape(void);
 	void cal_shape(FlashLight *light);
 	void cal_shape(void);
+	void cal_shape_with_delete(FlashLight *light);
+	void cal_final(void);
 
 private:
 	void set_member(int line_num = LINE_NUM, int colum_num = COLUM_NUM);

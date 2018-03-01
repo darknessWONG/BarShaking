@@ -48,6 +48,8 @@ extern const int PLAYER_INITAL_POS_Y;
 
 extern const int LIGHT_COLOR;
 extern const int VOID_COLOR;
+extern const int SHADOW_COLOR;
+extern const int UNCLEAR_COLOR;
 
 extern const int MAP_LINE_NUM;
 extern const int MAP_COLUM_NUM;

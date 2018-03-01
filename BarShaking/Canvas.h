@@ -41,7 +41,7 @@ private:
 	void set_member(int cav_line_num, int cav_colum_num, int display_line_num, int display_colum_num, int now_display_posX = 0, int now_display_posY = 0, int fps = 60);
 	void paint_list(Shape*);
 
-	void exception_parser(exception);
+	void exception_parser();
 
 	int cav_line_num;
 	int cav_colum_num;

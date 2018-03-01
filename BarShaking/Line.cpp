@@ -151,6 +151,7 @@ Point* Line::check_intersect(Line li)
 	return new Point(new_x, new_y);
 }
 
+
 void Line::init_member(void)
 {
 	a = 0.0f;

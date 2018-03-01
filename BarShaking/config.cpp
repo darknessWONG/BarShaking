@@ -23,6 +23,8 @@ const static int PLAYER_INITAL_POS_Y = LINE_NUM - 1;
 
 const static int LIGHT_COLOR = 7;
 const static int VOID_COLOR = 255;
+const static int SHADOW_COLOR = 5;
+const static int UNCLEAR_COLOR = 254;
 
 const static int MAP_LINE_NUM = 100;
 const static int MAP_COLUM_NUM = 300;

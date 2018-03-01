@@ -65,7 +65,7 @@ void Game::main_loop(void)
 
 			if (bar->get_radin() >= 0.5 || bar->get_radin() <= -0.5)
 			{
-				status = lost;
+				status = lose;
 			}
 		}
 	}

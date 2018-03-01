@@ -11,6 +11,26 @@ LightGame::LightGame()
 
 LightGame::~LightGame()
 {
+	delete canv;
+	delete light;
+	/*for (int i = 0; i < line_num; i++)
+	{
+		delete line[i];
+	}
+	delete[] line;*/
+	for (int i = 0; i < shadow_num; i++)
+	{
+		delete shadow[i];
+	}
+	delete[] shadow;
+	for (int i = 0; i < light_num; i++)
+	{
+		delete light[i];
+	}
+	delete[] light;
+	delete[] radin_speed;
+	delete[] twinkle_interval;
+	delete[] is_display_light;
 }
 
 void LightGame::start(void)
@@ -23,6 +43,7 @@ void LightGame::main_loop(void)
 {
 	clock_t current_time, last_time = 0;
 	int pass_time;
+	frame_num = 0;
 	while (status == unkwon)
 	{
 		current_time = clock();
@@ -32,12 +53,12 @@ void LightGame::main_loop(void)
 			NOW_FPS = 1.0f / ((current_time - last_time) / 1000.0f);
 
 			last_time = current_time;
-
+			frame_num++;
 
 
 			update_info();
 			paint();
-			check_win();
+			//check_win();
 		}
 	}
 
@@ -49,22 +70,64 @@ void LightGame::init_game(void)
 	canv->set_now_display_posX(0);
 	canv->set_now_display_posY(0);
 
-	light = new FlashLight(FLASHLIGHT_REL_X, FLASHLIGHT_REL_Y, FLASHLIGHT_WIDTH, FLASHLIGHT_RADIN, LINE_NUM, COLUM_NUM);
-	light->cal_shape();
+	light_num = 2;
+	light = new FlashLight*[light_num];
+	//light[0] = new FlashLight(FLASHLIGHT_REL_X, FLASHLIGHT_REL_Y, FLASHLIGHT_WIDTH, FLASHLIGHT_RADIN, LINE_NUM, COLUM_NUM);
+	light[0] = new FlashLight(19, 0, 0.2, 0.4);
+	light[1] = new FlashLight(50, 0, 0.1, 0.6);
+	for (int i = 0; i < light_num; i++)
+	{
+		light[i]->cal_shape();
+	}
+	radin_speed = new double[light_num];
+	radin_speed[0] = 0.01;
+	radin_speed[1] = 0;
+	twinkle_interval = new int[light_num];
+	twinkle_interval[0] = 0;
+	twinkle_interval[1] = 60;
+	is_display_light = new bool[light_num];
+	is_display_light[0] = true;
+	is_display_light[1] = true;
 
-	shadow = new Shadow (5, 10, 21, 10, LINE_NUM, COLUM_NUM);
-	shadow->cal_shape();
+	shadow_num = 2;
+	shadow = new Shadow*[shadow_num];
+	shadow[0] = new Shadow(5, 10, 21, 10, LINE_NUM, COLUM_NUM);
+	shadow[0] = new Shadow(0, 10, 20, 10, LINE_NUM, COLUM_NUM);
+	shadow[1] = new Shadow(28, 10, 40, 10, LINE_NUM, COLUM_NUM);
+	/*for (int i = 0; i < shadow_num; i++)
+	{
+		shadow[i]->cal_shape();
+	}*/
+
+	/*line_num = 2;
+	line = new Line*[line_num];
+	line[0] = new Line(0, 10, 20, 10);
+	line[1] = new Line(28, 10, 40, 10);*/
+
 
 	player = new Shape(FileReader::ReadModelFile("player.txt", "player_color.txt"));
-	player->set_rel_posX(PLAYER_INITAL_POS_X);
+	//player->set_rel_posX(PLAYER_INITAL_POS_X);
+	player->set_rel_posX(0);
 	player->set_rel_posY(PLAYER_INITAL_POS_Y);
 
+	gar = new Graph();
+	gar->set_line_num(LINE_NUM);
+	gar->set_colum_num(COLUM_NUM);
+	gar->set_canv(canv);
+	//for (int i = 0; i < light_num; i++)
+	//{
+	//	gar->add_light(light[i]);
+	//}
+	//for (int i = 0; i < shadow_num; i++)
+	//{
+	//	gar->add_shadow(line[i]);
+	//}
 
 	radin = 0;
 	status = unkwon;
-	radin_speed = 0.001;
-	twinkle_interval = 0;
-	is_display_light = true;
+	//radin_speed = 0.001;
+	//twinkle_interval = 0;
+	//is_display_light = true;
 
 }
 
@@ -91,12 +154,19 @@ void LightGame::update_player(void)
 
 void LightGame::update_light(void)
 {
-	if (light->get_radin() + light->get_width() + radin_speed >= 1
-		|| light->get_radin() + radin_speed <= 0)
+	for (int i = 0; i < light_num; i++)
 	{
-		radin_speed = -radin_speed;
+		if (twinkle_interval[i] != 0 && frame_num % twinkle_interval[i] == 0)
+		{
+			is_display_light[i] = !is_display_light[i];
+		}
+		if (light[i]->get_radin() + light[i]->get_width() + radin_speed[i] >= 1
+			|| light[i]->get_radin() + radin_speed[i] <= 0)
+		{
+			radin_speed[i] = -radin_speed[i];
+		}
+		light[i]->set_radin(light[i]->get_radin() + radin_speed[i]);
 	}
-	light->set_radin(light->get_radin() + radin_speed);
 }
 
 void LightGame::update_shadow(void)
@@ -106,17 +176,46 @@ void LightGame::update_shadow(void)
 
 void LightGame::check_win(void)
 {
+	bool is_lose = false;
 	for (int i = 0; i < player->get_line_num(); i++)
 	{
 		for (int j = 0; j < player->get_colum_num(); j++)
 		{
-			int real_pos = (i + player->get_rel_posY()) * shadow->get_colum_num() + (j + player->get_rel_posX());
-			if (light->get_shape()->get_color_map()[real_pos] == LIGHT_COLOR
-				&& shadow->get_shape()->get_color_map()[real_pos] == VOID_COLOR)
+			int real_pos = (i + player->get_rel_posY()) * COLUM_NUM + (j + player->get_rel_posX());
+			if (gar->get_background()->get_color_map()[real_pos] == LIGHT_COLOR)
 			{
-				status = Win_status::lost;
+				is_lose = true;
+			}
+			//for (int l = 0; l < light_num; l++)
+			//{
+			//	if (!is_display_light[l])
+			//	{
+			//		continue;
+			//	}
+			//	if (light[l]->get_shape()->get_color_map()[real_pos] == LIGHT_COLOR)
+			//	{
+			//		is_lose = true;
+			//	}
+			//}
+			//for (int k = 0; k < shadow_num; k++)
+			//{
+			//	if (shadow[k]->get_shape()->get_color_map()[real_pos] != VOID_COLOR)
+			//	{
+			//		is_lose = false;
+			//	}
+			//}
+
+			if (is_lose)
+			{
+				status = Win_status::lose;
 				return;
 			}
+			//if (light->get_shape()->get_color_map()[real_pos] == LIGHT_COLOR
+			//	&& shadow->get_shape()->get_color_map()[real_pos] == VOID_COLOR)
+			//{
+			//	status = Win_status::lost;
+			//	return;
+			//}
 		}
 	}
 	if (player->get_rel_posX() + player->get_colum_num() >= COLUM_NUM)
@@ -127,35 +226,60 @@ void LightGame::check_win(void)
 
 void LightGame::paint(void)
 {
-	canv->clean_shap_list();
-	canv->clean_map();
+	//canv->clean_shap_list();
+	//canv->clean_map();
+	gar->clean_shape();
+
+
 	paint_light();
 	paint_shadow();
 	paint_player();
 
-	canv->paint();
+	//gar->cal_background();
+	//canv->paint();
+	gar->paint();
 }
 
 void LightGame::paint_light(void)
 {
-	light->cal_shape();
-	canv->add_shap(light->get_shape(), 1);
+	for (int i = 0; i < light_num; i++)
+	{
+		if (is_display_light[i])
+		{
+			//light[i]->cal_shape();
+			//canv->add_shap(light[i]->get_shape(), 1);
+			gar->add_light(light[i]);
+		}
+	}
 }
 
 void LightGame::paint_shadow(void)
 {
-	if (is_display_light)
+
+	//for (int i = 0; i < shadow_num; i++)
+	//{
+	//	shadow[i]->delete_shape();
+	//	for (int j = 0; j < light_num; j++)
+	//	{
+	//		if (is_display_light[j])
+	//		{
+	//			shadow[i]->cal_shape(light[j]);
+	//		}
+	//	}
+	//}
+	//for (int i = 0; i < shadow_num; i++)
+	//{
+	//	canv->add_shap(shadow[1]->get_shape(), 2);
+	//}
+
+	for (int i = 0; i < shadow_num; i++)
 	{
-		shadow->cal_shape(light);
+		gar->add_shadow(shadow[i]);
 	}
-	else
-	{
-		shadow->cal_shape();
-	}
-	canv->add_shap(shadow->get_shape(), 2);
 }
 
 void LightGame::paint_player(void)
 {
-	canv->add_shap(player, 3);
+	//canv->add_shap(player, 3);
+	gar->set_player(player);
 }

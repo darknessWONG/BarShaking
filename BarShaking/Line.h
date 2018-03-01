@@ -33,7 +33,6 @@ public:
 	//if the point is on the top of the line return -1
 	int check_point(double x, double y);
 	Point* check_intersect(Line li);
-
 private:
 	void init_member(void);
 

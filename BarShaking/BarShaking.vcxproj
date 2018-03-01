@@ -152,6 +152,7 @@
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FlashLight.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="graph.h" />
     <ClInclude Include="LightGame.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="My_diallog_box.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FlashLight.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="graph.cpp" />
     <ClCompile Include="LightGame.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="My_diallog_box.cpp" />

@@ -58,6 +58,7 @@ Line Shadow::get_line(void)
 
 Shape * Shadow::get_shape(void)
 {
+	//cal_final();
 	return shape;
 }
 
@@ -73,10 +74,19 @@ void Shadow::delete_shape(void)
 void Shadow::cal_shape(FlashLight * light)
 {
 	line.cal_equations_from_point();
-	delete_shape();
+	//delete_shape();
 	
+
 	char *map = new_map(line_num * colum_num, ' ');
 	short *color_map = new_color_map(line_num * colum_num, 255);
+	if (shape != 0)
+	{
+		for (int i = 0; i < line_num * colum_num; i++)
+		{
+			map[i] = shape->get_map()[i];
+			color_map[i] = shape->get_color_map()[i];
+		}
+	}
 
 	Point* point_left = line.check_intersect(*light->get_line_left());
 	Point* point_right = line.check_intersect(*light->get_line_right());
@@ -90,66 +100,94 @@ void Shadow::cal_shape(FlashLight * light)
 	Line tangent_right(light->get_rel_x(), light->get_rel_y(), line.get_x2(), line.get_y2());
 	tangent_right.cal_equations_from_point();
 
+	bool is_shadow = false;
+
 	for (int i = line.get_y2(); i < line_num; i++)
 	{
 		for (int j = 0; j < colum_num; j++)
 		{
+			is_shadow = false;
 			if (j >= line.get_x1() && j <= line.get_x2() && i == line.get_y1())
 			{
 				color_map[i * colum_num + j] = 4;
 			}
-			//else if(intersect_status == Intersect_status::no_intersect)
-			//{
-			//	color_map[i * colum_num + j] = 0;
-			//}
 			else if(light->get_shape()->get_color_map()[i * colum_num + j] == LIGHT_COLOR)
 			{
-			
+				//shape->get_color_map()[i * colum_num + j] = UNCLEAR_COLOR;
 				if (intersect_status == Intersect_status::cover)
 				{
 					if (position_relation == Position_relation::outside_right 
 						&& tangent_left.check_point(j, i) > 0 && tangent_right.check_point(j, i) < 0)
 					{
-						color_map[i * colum_num + j] = 0;
+						is_shadow = true;
 					}
 					else if (position_relation == Position_relation::outside_left
 						&& tangent_left.check_point(j, i) < 0 && tangent_right.check_point(j, i) > 0)
 					{
-						color_map[i * colum_num + j] = 0;
+						is_shadow = true;
 					}
 					else if (position_relation == Position_relation::middle
 						&& tangent_left.check_point(j, i) > 0 && tangent_right.check_point(j, i) > 0)
 					{
-						color_map[i * colum_num + j] = 0;
+						is_shadow = true;
 					}
 				}
-				if (intersect_status == Intersect_status::right_half_block)
+				else if (intersect_status == Intersect_status::right_half_block)
 				{
-					if (tangent_left.check_point(j, i) > 0 && i > line.get_y1())
+					if (position_relation == Position_relation::outside_left
+						&& tangent_left.check_point(j, i) < 0 && i > line.get_y1())
 					{
-						color_map[i * colum_num + j] = 0;
+						is_shadow = true;
+					}
+					else if((position_relation == Position_relation::outside_right || position_relation == Position_relation::middle)
+						&& tangent_left.check_point(j, i) > 0 && i > line.get_y1())
+					{
+						is_shadow = true;
 					}
 				}
-				if (intersect_status == Intersect_status::left_half_block)
+				else if (intersect_status == Intersect_status::left_half_block)
 				{
-					if (tangent_right.check_point(j, i) > 0 && i > line.get_y1())
+					if (position_relation == Position_relation::outside_right
+						&& tangent_right.check_point(j, i) < 0 && i > line.get_y1())
 					{
-						color_map[i * colum_num + j] = 0;
+						is_shadow = true;
+					}
+					else if ((position_relation == Position_relation::outside_left || position_relation == Position_relation::middle)
+						&& tangent_right.check_point(j, i) > 0 && i > line.get_y1())
+					{
+						is_shadow = true;
 					}
 				}
-				if (intersect_status == Intersect_status::blocked)
+				else if (intersect_status == Intersect_status::blocked)
 				{
-					if (i >= line.get_y1())
+					if (i > line.get_y1())
 					{
-						color_map[i * colum_num + j] = 0;
+						is_shadow = true;
 					}
 				}
-
+				if (!is_shadow)
+				{
+					color_map[i * colum_num + j] = UNCLEAR_COLOR;
+				}
+				else
+				{
+					if (shape == 0 || shape->get_color_map()[i * colum_num + j] != UNCLEAR_COLOR)
+					{
+						color_map[i * colum_num + j] = SHADOW_COLOR;
+					}
+				}
 			}
 		}
 	}
 
-	shape = new Shape(line_num, colum_num, map, color_map, 0, 0);
+	if (shape == 0)
+	{
+		shape = new Shape(line_num, colum_num, map, color_map, 0, 0);
+	}
+	else
+	{
+		shape->set_map_with_delte(map, color_map, line_num, colum_num);
+	}
 
 	delete point_left;
 	delete point_right;
@@ -157,24 +195,135 @@ void Shadow::cal_shape(FlashLight * light)
 
 void Shadow::cal_shape(void)
 {
-	line.cal_equations_from_point();
+	char *map = new_map(line.get_x2() - line.get_x1() + 1, ' ');
+	short *color_map = new_color_map(line.get_x2() - line.get_x1() + 1, 4);
+	if (shape == 0)
+	{
+		shape = new Shape(1, line.get_x2() - line.get_x1() + 1, map, color_map, line.get_x1(), line.get_y1());
+	}
+	else
+	{
+		shape->set_map_with_delte(map, color_map, 1, line.get_x2() - line.get_x1() + 1);
+		shape->set_rel_posX(line.get_x1());
+		shape->set_rel_posY(line.get_y2());
+	}
+}
+
+void Shadow::cal_shape_with_delete(FlashLight * light)
+{
+	//line.cal_equations_from_point();
 	delete_shape();
 
-	char *map = new_map(line_num * colum_num, ' ');
-	short *color_map = new_color_map(line_num * colum_num, 255);
+	cal_shape(light);
+	//char *map = new_map(line_num * colum_num, ' ');
+	//short *color_map = new_color_map(line_num * colum_num, 255);
 
-	for (int i = line.get_y2(); i < line_num; i++)
+	//Point* point_left = line.check_intersect(*light->get_line_left());
+	//Point* point_right = line.check_intersect(*light->get_line_right());
+
+	//Intersect_status intersect_status = cal_intersect_status(*point_left, *point_right, line);
+	//Point light_point(light->get_rel_x(), light->get_rel_y());
+	//Position_relation position_relation = cal_position_relation(light_point, line);
+
+	//Line tangent_left(light->get_rel_x(), light->get_rel_y(), line.get_x1(), line.get_y1());
+	//tangent_left.cal_equations_from_point();
+	//Line tangent_right(light->get_rel_x(), light->get_rel_y(), line.get_x2(), line.get_y2());
+	//tangent_right.cal_equations_from_point();
+
+	//bool is_shadow = false;
+
+	//for (int i = line.get_y2(); i < line_num; i++)
+	//{
+	//	for (int j = 0; j < colum_num; j++)
+	//	{
+	//		is_shadow = false;
+	//		if (j >= line.get_x1() && j <= line.get_x2() && i == line.get_y1())
+	//		{
+	//			color_map[i * colum_num + j] = 4;
+	//		}
+	//		else if (light->get_shape()->get_color_map()[i * colum_num + j] == LIGHT_COLOR)
+	//		{
+
+	//			if (intersect_status == Intersect_status::cover)
+	//			{
+	//				if (position_relation == Position_relation::outside_right
+	//					&& tangent_left.check_point(j, i) > 0 && tangent_right.check_point(j, i) < 0)
+	//				{
+	//					//color_map[i * colum_num + j] = 0;
+	//					is_shadow = true;
+	//				}
+	//				else if (position_relation == Position_relation::outside_left
+	//					&& tangent_left.check_point(j, i) < 0 && tangent_right.check_point(j, i) > 0)
+	//				{
+	//					is_shadow = true;
+	//				}
+	//				else if (position_relation == Position_relation::middle
+	//					&& tangent_left.check_point(j, i) > 0 && tangent_right.check_point(j, i) > 0)
+	//				{
+	//					is_shadow = true;
+	//				}
+	//			}
+	//			if (intersect_status == Intersect_status::right_half_block)
+	//			{
+	//				if (position_relation == Position_relation::outside_left
+	//					&& tangent_left.check_point(j, i) < 0 && i > line.get_y1())
+	//				{
+	//					is_shadow = true;
+	//				}
+	//				else if ((position_relation == Position_relation::outside_right || position_relation == Position_relation::middle)
+	//					&& tangent_left.check_point(j, i) > 0 && i > line.get_y1())
+	//				{
+	//					is_shadow = true;
+	//				}
+	//			}
+	//			if (intersect_status == Intersect_status::left_half_block)
+	//			{
+	//				if (position_relation == Position_relation::outside_right
+	//					&& tangent_right.check_point(j, i) < 0 && i > line.get_y1())
+	//				{
+	//					is_shadow = true;
+	//				}
+	//				else if ((position_relation == Position_relation::outside_left || position_relation == Position_relation::middle)
+	//					&& tangent_right.check_point(j, i) > 0 && i > line.get_y1())
+	//				{
+	//					is_shadow = true;
+	//				}
+	//			}
+	//			if (intersect_status == Intersect_status::blocked)
+	//			{
+	//				if (i > line.get_y1())
+	//				{
+	//					is_shadow = true;
+	//				}
+	//			}
+	//			if (!is_shadow)
+	//			{
+	//				color_map[i * colum_num + j] = UNCLEAR_COLOR;
+	//			}
+	//			else
+	//			{
+
+	//				color_map[i * colum_num + j] = SHADOW_COLOR;
+	//			}
+	//		}
+	//	}
+	//}
+
+	//shape = new Shape(line_num, colum_num, map, color_map, 0, 0);
+
+	//delete point_left;
+	//delete point_right;
+}
+
+void Shadow::cal_final(void)
+{
+	for (int i = 0; i < line_num * colum_num; i++)
 	{
-		for (int j = 0; j < colum_num; j++)
+		if (shape->get_color_map()[i] == UNCLEAR_COLOR)
 		{
-			if (j >= line.get_x1() && j <= line.get_x2() && i == line.get_y1())
-			{
-				color_map[i * colum_num + j] = 4;
-			}
+			shape->get_color_map()[i] = VOID_COLOR;
 		}
 	}
-
-	shape = new Shape(line_num, colum_num, map, color_map, 0, 0);
 }
 
 void Shadow::set_member(int line_num, int colum_num)
