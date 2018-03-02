@@ -17,8 +17,8 @@ public:
 	void set_radin(double);
 	double get_width(void);
 	void set_width(double);
-	int get_rel_x(void);
-	void set_rel_x(int);
+	double get_rel_x(void);
+	void set_rel_x(double);
 	int get_rel_y(void);
 	void set_rel_y(int);
 	int get_line_num(void);
@@ -43,7 +43,7 @@ private:
 	Line *line_right = 0;
 	double radin;
 	double width;
-	int rel_x;
+	double rel_x;
 	int rel_y;
 	int line_num;
 	int colum_num;

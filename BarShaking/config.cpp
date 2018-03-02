@@ -39,8 +39,13 @@ const static int ROLE_COLUM_NUM = 15;
 const static string TIME_BOX_STR = "time: %s";
 
 
-const static string MAIN_SOUND_STR = "./music/miyako-japan3.mp3";
+const static string MAIN_SOUND_STR = "./bg090601.mp3";
+const static string TITLE_FILE_STR = "./title.txt";
+const static string TITLE_COLOR_FILE_STR = "./title_color.txt";
+const static string FINAL_FILE_STR = "./final_good.txt";
+const static string FINAL_COLOR_FILE_STR = "./final_good_color.txt";
 const static string BATTLE_SOUND_STR = "./music/wen-kamuy2.mp3";
+const static string LEVEL_FILE_STR = "level%d.txt";
 
 string num_to_str(int num)
 {

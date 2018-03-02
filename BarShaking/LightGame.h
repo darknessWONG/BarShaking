@@ -15,6 +15,7 @@ public:
 	void main_loop(void);
 private:
 	void init_game(void);
+	void init_level(int);
 
 	void update_info(void);
 	void update_player(void);
@@ -27,11 +28,21 @@ private:
 	void paint_shadow(void);
 	void paint_player(void);
 
+	void title_phase(void);
+	void end_phase(void);
+
+	void clean_light(void);
+	void clean_shadow(void);
+
+
 	Canvas *canv = 0;
+
+	int level;
+	int level_max;
 
 	FlashLight **light = 0;
 	int light_num;
-	double *radin = 0;
+	double *speed = 0;
 	double *radin_speed = 0;
 	int *twinkle_interval = 0;
 	int frame_num;
@@ -42,6 +53,7 @@ private:
 	//Line **line = 0;
 	//int line_num;
 
+	int main_handle;
 
 	Shape *player = 0;
 

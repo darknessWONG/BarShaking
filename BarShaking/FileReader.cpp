@@ -95,6 +95,47 @@ int * FileReader::ReadConfigFile(string fileName)
 	return prt;
 }
 
+void FileReader::ReadLevelFile(string fileName, FlashLight **& lights, int & light_num, double *& radin_speed, double *& speed, int *& fream, Shadow **& shadow, int & shadow_num)
+{
+	fstream file(fileName, ios::in);
+
+	file >> light_num;
+	lights = new FlashLight*[light_num];
+	radin_speed = new double[light_num];
+	speed = new double[light_num];
+	fream = new int[light_num];
+
+	for (int i = 0; i < light_num; i++)
+	{
+		int x, y;
+		double width, radin;
+		file >> x >> y >> width >> radin;
+		lights[i] = new FlashLight(x, y, width, radin);
+	}
+	for (int i = 0; i < light_num; i++)
+	{
+		file >> radin_speed[i];
+	}
+	for (int i = 0; i < light_num; i++)
+	{
+		file >> fream[i];
+	}
+	for (int i = 0; i < light_num; i++)
+	{
+		file >> speed[i];
+	}
+
+	file >> shadow_num;
+	shadow = new Shadow*[shadow_num];
+	for (int i = 0; i < shadow_num; i++)
+	{
+		int x1, y1, x2, y2;
+		file >> x1 >> y1 >> x2 >> y2;
+		shadow[i] = new Shadow(x1, y1, x2, y2, LINE_NUM, COLUM_NUM);
+	}
+
+}
+
 int FileReader::get_int_from_letter(char c)
 {
 	if (c >= '0' && c <= '9')

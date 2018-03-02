@@ -53,12 +53,12 @@ void FlashLight::set_width(double width)
 	this->width = width;
 }
 
-int FlashLight::get_rel_x(void)
+double FlashLight::get_rel_x(void)
 {
 	return rel_x;
 }
 
-void FlashLight::set_rel_x(int rel_x)
+void FlashLight::set_rel_x(double rel_x)
 {
 	this->rel_x = rel_x;
 }

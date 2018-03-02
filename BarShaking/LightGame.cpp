@@ -12,31 +12,24 @@ LightGame::LightGame()
 LightGame::~LightGame()
 {
 	delete canv;
-	delete light;
+	delete player;
 	/*for (int i = 0; i < line_num; i++)
 	{
 		delete line[i];
 	}
 	delete[] line;*/
-	for (int i = 0; i < shadow_num; i++)
-	{
-		delete shadow[i];
-	}
-	delete[] shadow;
-	for (int i = 0; i < light_num; i++)
-	{
-		delete light[i];
-	}
-	delete[] light;
-	delete[] radin_speed;
-	delete[] twinkle_interval;
-	delete[] is_display_light;
+	clean_light();
+	clean_shadow();
+	closesound(main_handle);
 }
 
 void LightGame::start(void)
 {
 	init_game();
+	playsound(main_handle, 1);
+	title_phase();
 	main_loop();
+	end_phase();
 }
 
 void LightGame::main_loop(void)
@@ -44,21 +37,38 @@ void LightGame::main_loop(void)
 	clock_t current_time, last_time = 0;
 	int pass_time;
 	frame_num = 0;
-	while (status == unkwon)
+	while (status != win && status != lose)
 	{
-		current_time = clock();
-		pass_time = current_time - last_time;
-		if (pass_time >= (double)1 / FPS * 1000)
+		if (level > level_max)
 		{
-			NOW_FPS = 1.0f / ((current_time - last_time) / 1000.0f);
+			status = win;
+		}
+		else
+		{
+			init_level(level);
+			status = unkwon;
+		}
+		while (status == unkwon)
+		{
+			current_time = clock();
+			pass_time = current_time - last_time;
+			if (pass_time >= (double)1 / FPS * 1000)
+			{
+				NOW_FPS = 1.0f / ((current_time - last_time) / 1000.0f);
 
-			last_time = current_time;
-			frame_num++;
+				last_time = current_time;
+				frame_num++;
 
 
-			update_info();
-			paint();
-			//check_win();
+				update_info();
+				paint();
+				check_win();
+			}
+		}
+		gar->clean_up();
+		if (status == level_up)
+		{
+			level++;
 		}
 	}
 
@@ -66,49 +76,18 @@ void LightGame::main_loop(void)
 
 void LightGame::init_game(void)
 {
+	char *main_sound_str = new char[MAIN_SOUND_STR.length()];
+	strcpy(main_sound_str, MAIN_SOUND_STR.c_str());
+	main_handle = opensound(main_sound_str);
+
+	level = 1;
+	level_max = 4;
 	canv = new Canvas(CAV_LINE_NUM, CAV_COLUM_NUM, LINE_NUM, COLUM_NUM);
 	canv->set_now_display_posX(0);
 	canv->set_now_display_posY(0);
 
-	light_num = 2;
-	light = new FlashLight*[light_num];
-	//light[0] = new FlashLight(FLASHLIGHT_REL_X, FLASHLIGHT_REL_Y, FLASHLIGHT_WIDTH, FLASHLIGHT_RADIN, LINE_NUM, COLUM_NUM);
-	light[0] = new FlashLight(19, 0, 0.2, 0.4);
-	light[1] = new FlashLight(50, 0, 0.1, 0.6);
-	for (int i = 0; i < light_num; i++)
-	{
-		light[i]->cal_shape();
-	}
-	radin_speed = new double[light_num];
-	radin_speed[0] = 0.01;
-	radin_speed[1] = 0;
-	twinkle_interval = new int[light_num];
-	twinkle_interval[0] = 0;
-	twinkle_interval[1] = 60;
-	is_display_light = new bool[light_num];
-	is_display_light[0] = true;
-	is_display_light[1] = true;
-
-	shadow_num = 2;
-	shadow = new Shadow*[shadow_num];
-	shadow[0] = new Shadow(5, 10, 21, 10, LINE_NUM, COLUM_NUM);
-	shadow[0] = new Shadow(0, 10, 20, 10, LINE_NUM, COLUM_NUM);
-	shadow[1] = new Shadow(28, 10, 40, 10, LINE_NUM, COLUM_NUM);
-	/*for (int i = 0; i < shadow_num; i++)
-	{
-		shadow[i]->cal_shape();
-	}*/
-
-	/*line_num = 2;
-	line = new Line*[line_num];
-	line[0] = new Line(0, 10, 20, 10);
-	line[1] = new Line(28, 10, 40, 10);*/
-
 
 	player = new Shape(FileReader::ReadModelFile("player.txt", "player_color.txt"));
-	//player->set_rel_posX(PLAYER_INITAL_POS_X);
-	player->set_rel_posX(0);
-	player->set_rel_posY(PLAYER_INITAL_POS_Y);
 
 	gar = new Graph();
 	gar->set_line_num(LINE_NUM);
@@ -123,12 +102,60 @@ void LightGame::init_game(void)
 	//	gar->add_shadow(line[i]);
 	//}
 
-	radin = 0;
+	//radin = 0;
 	status = unkwon;
 	//radin_speed = 0.001;
 	//twinkle_interval = 0;
 	//is_display_light = true;
 
+}
+
+void LightGame::init_level(int level)
+{
+	clean_light();
+	clean_shadow();
+
+	string file_name = LEVEL_FILE_STR;
+	file_name = file_name.replace(LEVEL_FILE_STR.find("%d"), 2, num_to_str(level));
+	FileReader::ReadLevelFile(file_name, light, light_num, radin_speed, speed, twinkle_interval, shadow, shadow_num);
+	//light_num = 2;
+	//light = new FlashLight*[light_num];
+	//light[0] = new FlashLight(FLASHLIGHT_REL_X, FLASHLIGHT_REL_Y, FLASHLIGHT_WIDTH, FLASHLIGHT_RADIN, LINE_NUM, COLUM_NUM);
+	/*light[0] = new FlashLight(19, 0, 0.2, 0.4);
+	light[1] = new FlashLight(50, 0, 0.1, 0.6);*/
+	for (int i = 0; i < light_num; i++)
+	{
+		light[i]->cal_shape();
+	}
+	//radin_speed = new double[light_num];
+	//radin_speed[0] = 0.01;
+	//radin_speed[1] = 0;
+	//twinkle_interval = new int[light_num];
+	//twinkle_interval[0] = 0;
+	//twinkle_interval[1] = 60;
+	is_display_light = new bool[light_num];
+	for (int i = 0; i < light_num; i++)
+	{
+		is_display_light[i] = true;
+	}
+
+	//shadow_num = 2;
+	//shadow = new Shadow*[shadow_num];
+	//shadow[0] = new Shadow(5, 10, 21, 10, LINE_NUM, COLUM_NUM);
+	//shadow[0] = new Shadow(0, 10, 20, 10, LINE_NUM, COLUM_NUM);
+	/*shadow[1] = new Shadow(28, 10, 40, 10, LINE_NUM, COLUM_NUM);*/
+	/*for (int i = 0; i < shadow_num; i++)
+	{
+	shadow[i]->cal_shape();
+	}*/
+
+	/*line_num = 2;
+	line = new Line*[line_num];
+	line[0] = new Line(0, 10, 20, 10);
+	line[1] = new Line(28, 10, 40, 10);*/
+
+	player->set_rel_posX(PLAYER_INITAL_POS_X);
+	player->set_rel_posY(PLAYER_INITAL_POS_Y);
 }
 
 void LightGame::update_info(void)
@@ -166,6 +193,12 @@ void LightGame::update_light(void)
 			radin_speed[i] = -radin_speed[i];
 		}
 		light[i]->set_radin(light[i]->get_radin() + radin_speed[i]);
+		if (light[i]->get_rel_x() + speed[i] >= gar->get_colum_num()
+			|| light[i]->get_rel_x() + speed[i] <= 0)
+		{
+			speed[i] = -speed[i];
+		}
+		light[i]->set_rel_x(light[i]->get_rel_x() + speed[i]);
 	}
 }
 
@@ -207,7 +240,7 @@ void LightGame::check_win(void)
 
 			if (is_lose)
 			{
-				status = Win_status::lose;
+				//status = Win_status::lose;
 				return;
 			}
 			//if (light->get_shape()->get_color_map()[real_pos] == LIGHT_COLOR
@@ -220,7 +253,7 @@ void LightGame::check_win(void)
 	}
 	if (player->get_rel_posX() + player->get_colum_num() >= COLUM_NUM)
 	{
-		status = Win_status::win;
+		status = Win_status::level_up;
 	}
 }
 
@@ -282,4 +315,67 @@ void LightGame::paint_player(void)
 {
 	//canv->add_shap(player, 3);
 	gar->set_player(player);
+}
+
+void LightGame::title_phase(void)
+{
+	Shape gg = FileReader::ReadModelFile(TITLE_FILE_STR, TITLE_COLOR_FILE_STR);
+	gg.set_shape_next(0);
+
+	canv->clean_map();
+	canv->clean_shap_list();
+	canv->add_shap(&gg, 1);
+	canv->paint();
+
+	while (!inport(PK_SP))
+	{
+	}
+
+	canv->clean_map();
+	canv->clean_shap_list();
+}
+
+void LightGame::end_phase(void)
+{
+	Shape gg = FileReader::ReadModelFile(FINAL_FILE_STR, FINAL_COLOR_FILE_STR);
+	gg.set_shape_next(0);
+
+	canv->clean_map();
+	canv->clean_shap_list();
+	canv->add_shap(&gg, 1);
+	canv->paint();
+
+	while (!inport(PK_SP))
+	{
+	}
+
+	canv->clean_map();
+	canv->clean_shap_list();
+}
+
+void LightGame::clean_light(void)
+{
+	if (light != 0)
+	{
+		for (int i = 0; i < light_num; i++)
+		{
+			delete light[i];
+		}
+		delete[] light;
+		delete[] radin_speed;
+		delete[] twinkle_interval;
+		delete[] is_display_light;
+	}
+}
+
+void LightGame::clean_shadow(void)
+{
+	if (shadow != 0)
+	{
+		for (int i = 0; i < shadow_num; i++)
+		{
+			delete shadow[i];
+		}
+		delete[] shadow;
+	}
 }

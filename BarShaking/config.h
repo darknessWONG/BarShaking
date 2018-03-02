@@ -63,7 +63,12 @@ extern const int ROLE_COLUM_NUM;
 extern const string TIME_BOX_STR;
 
 extern const string MAIN_SOUND_STR;
+extern const string TITLE_FILE_STR;
+extern const string TITLE_COLOR_FILE_STR;
+extern const string FINAL_FILE_STR;
+extern const string FINAL_COLOR_FILE_STR;
 extern const string BATTLE_SOUND_STR;
+extern const string LEVEL_FILE_STR;
 
 string num_to_str(int);
 string num_to_str(double);
